@@ -3,11 +3,9 @@ module.exports = {
     browser: true,
     node: true,
     es2021: true,
-    jest: true,
   },
   extends: [
     "eslint:recommended",
-    "plugin:cypress/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:promise/recommended",
     "plugin:react/recommended",
@@ -16,10 +14,6 @@ module.exports = {
     "prettier/@typescript-eslint",
     "prettier/react",
   ],
-  globals: {
-    jest: true,
-    "cypress/globals": true,
-  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: {
@@ -30,7 +24,6 @@ module.exports = {
   },
   plugins: [
     "@typescript-eslint",
-    "cypress",
     "jsx-a11y",
     "promise",
     "react",
@@ -43,9 +36,6 @@ module.exports = {
   settings: {
     react: {
       version: "detect",
-    },
-    jest: {
-      version: 26,
     },
   },
 };
