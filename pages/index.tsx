@@ -37,7 +37,7 @@ export default function Home() {
       pathname: "https://www.strava.com/oauth/authorize",
       query: {
         client_id: clientID,
-        redirect_uri: "http://localhost:3000",
+        redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL,
         response_type: "code",
         approval_prompt: "auto",
         scope: "activity:read",
