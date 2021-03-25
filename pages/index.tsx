@@ -1,9 +1,20 @@
+import useSWR from "swr";
 import { Typography } from "@material-ui/core";
 
-export default function Home() {
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const Home = () => {
+  const { data, error } = useSWR("/api/results/user/2", fetcher);
+
+  if (error) return <div>Failed to load</div>;
+  if (!data) return <div>Loading...</div>;
+
+  console.log(data);
+
   return (
     <div className="h-full text-center">
       <Typography variant="h1">Hello world</Typography>
     </div>
   );
 }
+export default Home;
