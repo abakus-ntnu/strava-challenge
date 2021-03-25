@@ -1,4 +1,4 @@
-// Points mer meter
+// Points per meter
 
 const points = {
     biking: 1,
