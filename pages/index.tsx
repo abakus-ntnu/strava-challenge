@@ -1,11 +1,10 @@
-
 import useSWR from "swr";
 import { Button, Typography } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function Home() {
+const Home = () => {
   const router = useRouter();
   const clientID = 61772;
   const { data, error } = useSWR("/api/results/top30grade/1", fetcher);
@@ -61,5 +60,5 @@ export default function Home() {
       <Button onClick={() => getAuthToken()}>Logg inn med Strava</Button>
     </div>
   );
-}
+};
 export default Home;

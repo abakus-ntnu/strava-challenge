@@ -4,7 +4,7 @@ import { Activity, User } from "models/schema";
 import url from "utils";
 
 const test = async (req: NextApiRequest, res: NextApiResponse) => {
-    mongoose.connect(url, {
+  mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -18,8 +18,8 @@ const test = async (req: NextApiRequest, res: NextApiResponse) => {
   res.setHeader("Content-Type", "application/json");
 
   res.json({
-      activities,
-      users,
+    activities,
+    users,
   });
-}
+};
 export default test;

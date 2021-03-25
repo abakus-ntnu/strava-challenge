@@ -13,13 +13,15 @@ const grade = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const grade = req.query.grade;
 
-  const users: Array<any> = await User.find({"grade": grade}).populate("activities");
+  const users: Array<any> = await User.find({ grade: grade }).populate(
+    "activities"
+  );
 
   res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json")
+  res.setHeader("Content-Type", "application/json");
 
   res.json({
-    users
+    users,
   });
-}
+};
 export default grade;

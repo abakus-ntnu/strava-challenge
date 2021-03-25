@@ -11,8 +11,8 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json")
+  res.setHeader("Content-Type", "application/json");
 
   res.json({});
-}
+};
 export default totalScoreGrades;
