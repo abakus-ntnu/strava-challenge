@@ -1,9 +1,18 @@
+import useSWR from "swr";
 import { Button, Typography } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 
-export default function Home() {
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const Home = () => {
   const router = useRouter();
   const clientID = 61772;
+  const { data, error } = useSWR("/api/results/top30grade/1", fetcher);
+
+  if (error) return <div>Failed to load</div>;
+  if (!data) return <div>Loading...</div>;
+
+  console.log(data);
 
   const getAthlete = async (code: string) => {
     const athlete = await fetch("http://localhost:3000/api/athlete", {
@@ -44,10 +53,12 @@ export default function Home() {
       },
     });
   };
+
   return (
     <div className="h-full text-center">
       <Typography variant="h1">Hello world</Typography>
       <Button onClick={() => getAuthToken()}>Logg inn med Strava</Button>
     </div>
   );
-}
+};
+export default Home;
