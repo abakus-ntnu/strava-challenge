@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
 import { User } from "models/schema";
+import mongoose from "mongoose";
 import url from "utils";
 
 const grade = async (req: NextApiRequest, res: NextApiResponse) => {
