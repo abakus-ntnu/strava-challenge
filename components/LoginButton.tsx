@@ -2,17 +2,19 @@ import { Button } from "@material-ui/core";
 import { useRouter } from "next/dist/client/router";
 import { UserEntity } from "../lib/Types";
 import { clientID } from "../lib/stravaUtils";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useGlobalState } from "./StateManagement/GlobalStateProvider";
 
 const LoginButton = () => {
   const router = useRouter();
-  const setCookie = (key: string, value: string) =>
-    localStorage.setItem(key, value);
-  const getCookie = (key: string) => localStorage.getItem(key);
+  const { state, setState } = useGlobalState();
 
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(
-    getCookie("authCode") ? true : false
-  );
+  useEffect(() => {
+    setState({
+      ...state,
+      isAuthenticated: localStorage.getItem("authCode") ? true : false,
+    });
+  }, [state, setState]);
 
   const authorizeUser = async (code: string): Promise<UserEntity> =>
     await fetch(process.env.NEXT_PUBLIC_REDIRECT_URL + "/api/login", {
@@ -37,36 +39,38 @@ const LoginButton = () => {
   };
 
   const deAuthorize = async () => {
-    setIsAuthorized(false);
+    setState({ ...state, isAuthenticated: false });
+    const userId = localStorage.getItem("userId");
+    const authCode = localStorage.getItem("authCode");
+    localStorage.clear();
     await fetch(process.env.NEXT_PUBLIC_REDIRECT_URL + "/api/logout", {
       body: JSON.stringify({
-        userId: getCookie("userId"),
-        authCode: getCookie("authCode"),
+        userId: userId,
+        authCode: authCode,
       }),
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    localStorage.clear();
   };
 
   const login = async () => {
-    if (router.query.code && router.query.scope && !isAuthorized) {
+    if (router.query.code && router.query.scope && !state.isAuthenticated) {
       if (!router.query.scope.includes("activity:read")) {
         alert(
           'Du må krysse av på "View data about your activities" for å logge inn.'
         );
         return;
       }
-      setIsAuthorized(true);
+      setState({ ...state, isAuthenticated: true });
       const authCode = String(router.query.code);
       router.push("/");
 
       const user = await authorizeUser(authCode);
 
-      setCookie("authCode", authCode);
-      setCookie("userId", String(user.id));
+      localStorage.setItem("authCode", authCode);
+      localStorage.setItem("userId", String(user.id));
 
       if (user.grade) {
         // TODO Display personal page
@@ -92,9 +96,11 @@ const LoginButton = () => {
   return (
     <Button
       variant="outlined"
-      onClick={() => (isAuthorized ? deAuthorize() : authorizeStrava())}
+      onClick={() =>
+        state.isAuthenticated ? deAuthorize() : authorizeStrava()
+      }
     >
-      {isAuthorized ? "Logg ut" : "Logg inn med Strava"}
+      {state.isAuthenticated ? "Logg ut" : "Logg inn med Strava"}
     </Button>
   );
 };
