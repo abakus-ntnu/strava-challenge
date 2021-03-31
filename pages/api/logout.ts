@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
     const userId = await getUserId(req.body["authCode"]);
     if (userId) {
-      const authToken = await StravaToken.findOne({ userId: userId});
+      const authToken = await StravaToken.findOne({ userId: userId });
       await deAuthorizeStravaToken(authToken.accessToken);
       await removeUserTokens(userId);
       await deAuthorizeUser(userId);

@@ -14,7 +14,7 @@ const LoginButton = () => {
       ...state,
       isAuthenticated: localStorage.getItem("authCode") ? true : false,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const authorizeUser = async (code: string): Promise<UserEntity> =>

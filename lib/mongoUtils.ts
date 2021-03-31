@@ -1,10 +1,6 @@
 import { Activity, User, StravaToken, AuthorizedUser } from "models/schema";
 import { Token, ActivityEntity, UserEntity } from "./Types.d";
-import {
-  getNewToken,
-  hasExpired,
-  getClubActivities,
-} from "./stravaUtils";
+import { getNewToken, hasExpired, getClubActivities } from "./stravaUtils";
 
 export const getToken = async () => {
   // Requires at least one authenticated user
@@ -91,4 +87,4 @@ export const authorizeUser = async (userId: number, authCode: string) =>
 export const getUserId = async (authCode: string): Promise<number> => {
   const user = await AuthorizedUser.findOne({ authCode: authCode });
   return user.userId;
-}
+};
