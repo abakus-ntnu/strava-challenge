@@ -14,7 +14,8 @@ const LoginButton = () => {
       ...state,
       isAuthenticated: localStorage.getItem("authCode") ? true : false,
     });
-  }, [state, setState]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const authorizeUser = async (code: string): Promise<UserEntity> =>
     await fetch(process.env.NEXT_PUBLIC_REDIRECT_URL + "/api/login", {
@@ -33,19 +34,16 @@ const LoginButton = () => {
         redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL,
         response_type: "code",
         approval_prompt: "auto",
-        scope: "activity:read",
       },
     });
   };
 
   const deAuthorize = async () => {
     setState({ ...state, isAuthenticated: false });
-    const userId = localStorage.getItem("userId");
     const authCode = localStorage.getItem("authCode");
     localStorage.clear();
     await fetch(process.env.NEXT_PUBLIC_REDIRECT_URL + "/api/logout", {
       body: JSON.stringify({
-        userId: userId,
         authCode: authCode,
       }),
       method: "POST",
@@ -56,13 +54,7 @@ const LoginButton = () => {
   };
 
   const login = async () => {
-    if (router.query.code && router.query.scope && !state.isAuthenticated) {
-      if (!router.query.scope.includes("activity:read")) {
-        alert(
-          'Du må krysse av på "View data about your activities" for å logge inn.'
-        );
-        return;
-      }
+    if (router.query.code && !state.isAuthenticated) {
       setState({ ...state, isAuthenticated: true });
       const authCode = String(router.query.code);
       router.push("/");
@@ -70,7 +62,6 @@ const LoginButton = () => {
       const user = await authorizeUser(authCode);
 
       localStorage.setItem("authCode", authCode);
-      localStorage.setItem("userId", String(user.id));
 
       if (user.grade) {
         // TODO Display personal page

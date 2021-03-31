@@ -1,22 +1,27 @@
 import { Activity, User, StravaToken, AuthorizedUser } from "models/schema";
 import { Token, ActivityEntity, UserEntity } from "./Types.d";
-import { getNewToken, getActivity, hasExpired } from "./stravaUtils";
+import {
+  getNewToken,
+  hasExpired,
+  getClubActivities,
+} from "./stravaUtils";
 
-export const getToken = async (userId: number) => {
-  const token = await StravaToken.findOne({ userId: userId });
+export const getToken = async () => {
+  // Requires at least one authenticated user
+  const token = await StravaToken.findOne();
   if (token && hasExpired(token)) {
     const newToken = await getNewToken(token.refreshToken);
-    await updateToken(newToken, userId);
+    await updateToken(newToken, token.userId);
     return newToken;
   }
   return token;
 };
 
 export const createActivity = async (activityId: number, userId: number) => {
-  const stravaToken = await getToken(userId);
-  const activityData = stravaToken
-    ? await getActivity(activityId, stravaToken.accessToken)
-    : {};
+  const stravaToken = await getToken();
+  const clubActivities = await getClubActivities(stravaToken.accessToken);
+  // Might be an issue if two activities are created at the exact same time
+  const activityData = clubActivities[0];
 
   const user = await findOrCreateUser({ id: userId });
   const activity = await Activity.create({
@@ -83,26 +88,7 @@ export const deAuthorizeUser = async (userId: number) =>
 export const authorizeUser = async (userId: number, authCode: string) =>
   await AuthorizedUser.create({ userId: userId, authCode: authCode });
 
-export const isAuthorized = async (
-  userId: number,
-  authCode: string
-): Promise<boolean> =>
-  (await AuthorizedUser.findOne({ userId: userId, authCode: authCode }))
-    ? true
-    : false;
-
-export const fetchActivityDetails = async (userId: number) => {
-  const user = await User.findOne({ id: userId });
-  const activities = await Activity.find({ athlete: user });
-  const stravaToken = await getToken(userId);
-
-  for (const activity of activities) {
-    const activityData = stravaToken
-      ? await getActivity(activity.id, stravaToken.accessToken)
-      : {};
-    await updateActivity(activity.id, {
-      ...activityData,
-      athlete: activity.athlete,
-    });
-  }
-};
+export const getUserId = async (authCode: string): Promise<number> => {
+  const user = await AuthorizedUser.findOne({ authCode: authCode });
+  return user.userId;
+}

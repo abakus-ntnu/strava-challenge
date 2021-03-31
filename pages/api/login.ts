@@ -3,7 +3,6 @@ import {
   findOrCreateUser,
   updateToken,
   authorizeUser,
-  fetchActivityDetails,
 } from "../../lib/mongoUtils";
 import { getAuthenticatedUser } from "../../lib/stravaUtils";
 import mongoose from "mongoose";
@@ -28,8 +27,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       };
 
       await updateToken(token, response.athlete.id);
-
-      await fetchActivityDetails(response.athlete.id);
 
       const user = await findOrCreateUser(response.athlete);
 

@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   removeUserTokens,
-  getToken,
   deAuthorizeUser,
-  isAuthorized,
+  getUserId,
 } from "../../lib/mongoUtils";
 import { deAuthorizeStravaToken } from "../../lib/stravaUtils";
 import mongoose from "mongoose";
 import url from "utils";
+import { StravaToken } from "../../models/schema";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
@@ -17,10 +17,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
   if (req.method === "POST") {
-    const userId = req.body["userId"];
-
-    if (await isAuthorized(userId, req.body["authCode"])) {
-      const authToken = await getToken(userId);
+    const userId = await getUserId(req.body["authCode"]);
+    if (userId) {
+      const authToken = await StravaToken.findOne({ userId: userId});
       await deAuthorizeStravaToken(authToken.accessToken);
       await removeUserTokens(userId);
       await deAuthorizeUser(userId);

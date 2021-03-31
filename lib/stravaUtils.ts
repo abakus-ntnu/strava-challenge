@@ -1,5 +1,6 @@
 import { Token } from "./Types";
 export const clientID = 61772;
+export const clubID = 895463;
 export const clientSecret = process.env.CLIENT_SECRET;
 
 const getAuthHeader = (accessToken: string) =>
@@ -17,11 +18,6 @@ export const getNewToken = async (refreshToken: string): Promise<Token> =>
     }
   ).then((response) => response.json());
 
-export const getActivity = async (activityId: number, accessToken: string) =>
-  await fetch(`https://www.strava.com/api/v3/activities/${activityId}`, {
-    headers: getAuthHeader(accessToken),
-  }).then((r) => r.json());
-
 export const getAuthenticatedUser = async (authorization_code: string) =>
   await fetch(
     `https://www.strava.com/api/v3/oauth/token?client_id=${clientID}&client_secret=${clientSecret}&code=${authorization_code}&grant_type=authorization_code`,
@@ -35,3 +31,12 @@ export const deAuthorizeStravaToken = async (accessToken: string) =>
     method: "POST",
     headers: getAuthHeader(accessToken),
   });
+
+export const getClubActivities = async (accessToken: string) => {
+  return await fetch(
+    `https://www.strava.com/api/v3/clubs/${clubID}/activities`,
+    {
+      headers: getAuthHeader(accessToken),
+    }
+  ).then((r) => r.json());
+};
