@@ -29,7 +29,7 @@ const top30total = async (req: NextApiRequest, res: NextApiResponse) => {
   const users = await User.find().populate("activities");
   let usersData: Array<any> = [];
 
-  users.forEach((user:any) => {
+  users.forEach((user: any) => {
     const userData = processUserData(user);
     usersData.push(userData);
   });

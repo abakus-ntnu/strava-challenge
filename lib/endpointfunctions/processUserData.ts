@@ -48,5 +48,5 @@ const processUserData = (user: any) => {
   };
 
   return userData;
-}
+};
 export default processUserData;
