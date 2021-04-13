@@ -1,8 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import { User } from "models/schema";
-import url from "utils";
-import points from "points";
+import url from "lib/dbUrl";
+import processUserData from "lib/endpointfunctions/processUserData";
+
+/*
+Returns data for the given user
+
+The data will be on the format:
+data = {
+  username: String,
+  firstname: String,
+  lastname: String,
+  grade: Number,
+  study: String,
+  distance: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  },
+  points: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  }
+*/
 
 const user = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
@@ -14,56 +38,12 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { id } = req.query;
 
-  const data = await User.findOne({ id: id }).populate("activities");
-  const activities: Array<any> = data.activities;
-
-  let totalBikingDistance = 0;
-  let totalRunningDistance = 0;
-  let totalWalkingDistance = 0;
-
-  activities.forEach((activity) => {
-    const distance = activity.distance;
-    switch (activity.type) {
-      case "Ride":
-        totalBikingDistance += distance;
-        break;
-      case "Run":
-        totalRunningDistance += distance;
-        break;
-      case "Walk":
-        totalWalkingDistance += distance;
-        break;
-    }
-  });
-
-  const userData = {
-    username: data.username,
-    firstname: data.firstname,
-    lastname: data.lastname,
-    grade: data.grade,
-    study: data.study,
-    distance: {
-      biking: totalBikingDistance,
-      running: totalRunningDistance,
-      walking: totalWalkingDistance,
-      total: totalBikingDistance + totalRunningDistance + totalWalkingDistance,
-    },
-    points: {
-      biking: totalBikingDistance * points.biking,
-      running: totalRunningDistance * points.running,
-      walking: totalWalkingDistance * points.walking,
-      total:
-        totalBikingDistance * points.biking +
-        totalRunningDistance * points.running +
-        totalWalkingDistance * points.walking,
-    },
-  };
+  const user = await User.findOne({ id: id }).populate("activities");
+  const userData = processUserData(user);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
-  res.json({
-    userData,
-  });
+  res.json(userData);
 };
 export default user;
