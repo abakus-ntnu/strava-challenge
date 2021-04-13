@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
-import url from "utils";
+import url from "lib/dbUrl";
 
 const top30komtek = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {

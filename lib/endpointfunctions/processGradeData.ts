@@ -1,28 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
-import url from "utils";
-import { User } from "models/schema";
-import points from "points";
+import points from "lib/points";
 
-const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
-  mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  });
+const processGradeData = (users: any, grade: number) => {
 
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-
-  let allGradesData: { [key: number]: any } = {};
-
-  for (let grade = 1; grade <= 5; grade++) {
-    const data: Array<any> = await User.find({ grade: grade }).populate(
-      "activities"
-    );
-    const activities: Array<any> = [];
-    data.forEach((user) => {
+  const activities: Array<any> = [];
+    users.forEach((user:any) => {
       user.activities.forEach((activity: any) => {
         activities.push(activity);
       });
@@ -48,6 +29,7 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const gradeData = {
+      grade: grade,
       distance: {
         biking: totalBikingDistance,
         running: totalRunningDistance,
@@ -65,12 +47,6 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
           totalWalkingDistance * points.walking,
       },
     };
-    allGradesData[grade] = gradeData;
-  }
-
-  res.json({
-    allGradesData,
-  });
-};
-
-export default totalScoreGrades;
+    return gradeData;
+}
+export default processGradeData;

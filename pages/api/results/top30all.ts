@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import { User } from "models/schema";
 import url from "lib/dbUrl";
 import processUserData from "lib/endpointfunctions/processUserData";
+import getTop30 from "lib/endpointfunctions/getTop30";
 
-const user = async (req: NextApiRequest, res: NextApiResponse) => {
+const top30total = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -12,16 +13,21 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
 
-  const { id } = req.query;
+  const users = await User.find().populate("activities");
+  let usersData: Array<any> = [];
 
-  const user = await User.findOne({ id: id }).populate("activities");
-  const userData = processUserData(user);
+  users.forEach((user:any) => {
+    const userData = processUserData(user);
+    usersData.push(userData);
+  });
+
+  const top30usersData = getTop30(usersData);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
   res.json({
-    userData,
+    top30usersData,
   });
 };
-export default user;
+export default top30total;

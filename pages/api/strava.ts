@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { StravaEventData } from "../../lib/Types";
 import { createActivity, updateActivity, deleteActivity } from "lib/mongoUtils";
 import mongoose from "mongoose";
-import url from "utils";
+import url from "url";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
