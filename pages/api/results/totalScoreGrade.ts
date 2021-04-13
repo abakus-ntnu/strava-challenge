@@ -15,15 +15,17 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
-  let allGradesData:{[key: number]: any} = {};
+  let allGradesData: { [key: number]: any } = {};
 
-  for (let grade=1; grade<=5; grade++){
-    const data: Array<any> = await User.find({ grade : grade }).populate("activities");
+  for (let grade = 1; grade <= 5; grade++) {
+    const data: Array<any> = await User.find({ grade: grade }).populate(
+      "activities"
+    );
     const activities: Array<any> = [];
-    data.forEach(user => {
-      user.activities.forEach((activity:any) => {
+    data.forEach((user) => {
+      user.activities.forEach((activity: any) => {
         activities.push(activity);
-      })
+      });
     });
 
     let totalBikingDistance = 0;
@@ -50,7 +52,8 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
         biking: totalBikingDistance,
         running: totalRunningDistance,
         walking: totalWalkingDistance,
-        total: totalBikingDistance + totalRunningDistance + totalWalkingDistance,
+        total:
+          totalBikingDistance + totalRunningDistance + totalWalkingDistance,
       },
       points: {
         biking: totalBikingDistance * points.biking,
@@ -63,7 +66,7 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     };
     allGradesData[grade] = gradeData;
-  };
+  }
 
   res.json({
     allGradesData,
