@@ -44,8 +44,6 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
-  res.json({
-    userData,
-  });
+  res.json(userData);
 };
 export default user;

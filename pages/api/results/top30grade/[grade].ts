@@ -33,8 +33,6 @@ const grade30grade = async (req: NextApiRequest, res: NextApiResponse) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
-  res.json({
-    users,
-  });
+  res.json(users);
 };
 export default grade30grade;

@@ -39,8 +39,6 @@ const top30all = async (req: NextApiRequest, res: NextApiResponse) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
 
-  res.json({
-    top30usersData,
-  });
+  res.json(top30usersData);
 };
 export default top30all;
