@@ -46,6 +46,7 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
       biking: totalBikingDistance,
       running: totalRunningDistance,
       walking: totalWalkingDistance,
+      total: totalBikingDistance + totalRunningDistance + totalWalkingDistance,
     },
     points: {
       biking: totalBikingDistance * points.biking,
