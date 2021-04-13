@@ -1,5 +1,7 @@
 import points from "lib/points";
 
+// Takes a user (where activities are populated), and returns userData
+// TODO: add types
 const processUserData = (user: any) => {
   const activities: Array<any> = user.activities;
 

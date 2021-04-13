@@ -4,6 +4,34 @@ import url from "lib/dbUrl";
 import { User } from "models/schema";
 import processGradeData from "lib/endpointfunctions/processGradeData";
 
+/*
+Returns data for each grade as a total
+
+The data will be on the format:
+data = [
+  grade1Data,
+  grade2Data,
+  ...
+  grade5Data
+]
+where grade?Data is on the format:
+grade?Data = {
+  grade: Number,
+  distance: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  },
+  points: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  }
+}
+*/
+
 const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
     useNewUrlParser: true,

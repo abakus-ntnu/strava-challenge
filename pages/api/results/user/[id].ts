@@ -4,6 +4,30 @@ import { User } from "models/schema";
 import url from "lib/dbUrl";
 import processUserData from "lib/endpointfunctions/processUserData";
 
+/*
+Returns data for the given user
+
+The data will be on the format:
+data = {
+  username: String,
+  firstname: String,
+  lastname: String,
+  grade: Number,
+  study: String,
+  distance: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  },
+  points: {
+    biking: Number,
+    running: Number,
+    walking: Number,
+    total: Number,
+  }
+*/
+
 const user = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
     useNewUrlParser: true,

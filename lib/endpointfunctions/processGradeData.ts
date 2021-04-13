@@ -1,5 +1,8 @@
 import points from "lib/points";
 
+
+// Takes an array of users in a grade (where activities are populated), and returns gradeData
+// TODO: add types
 const processGradeData = (users: any, grade: number) => {
 
   const activities: Array<any> = [];
