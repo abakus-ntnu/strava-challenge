@@ -16,7 +16,7 @@ data = [
 where user?Data is on the same format as data for a single user (se api/results/user/[id])
 */
 
-const grade = async (req: NextApiRequest, res: NextApiResponse) => {
+const grade30grade = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -37,4 +37,4 @@ const grade = async (req: NextApiRequest, res: NextApiResponse) => {
     users,
   });
 };
-export default grade;
+export default grade30grade;

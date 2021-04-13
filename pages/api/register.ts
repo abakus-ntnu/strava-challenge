@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { registerUser } from "../../lib/mongoUtils";
 import mongoose from "mongoose";
-import url from "url";
+import url from "lib/dbUrl";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {

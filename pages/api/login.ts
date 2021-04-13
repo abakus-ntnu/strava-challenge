@@ -6,7 +6,7 @@ import {
 } from "../../lib/mongoUtils";
 import { getAuthenticatedUser } from "../../lib/stravaUtils";
 import mongoose from "mongoose";
-import url from "url";
+import url from "lib/dbUrl";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {

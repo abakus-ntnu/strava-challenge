@@ -18,7 +18,7 @@ data = [
 where user?Data is on the same format as data for a single user (se api/results/user/[id])
 */
 
-const top30total = async (req: NextApiRequest, res: NextApiResponse) => {
+const top30all = async (req: NextApiRequest, res: NextApiResponse) => {
   mongoose.connect(url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -43,4 +43,4 @@ const top30total = async (req: NextApiRequest, res: NextApiResponse) => {
     top30usersData,
   });
 };
-export default top30total;
+export default top30all;

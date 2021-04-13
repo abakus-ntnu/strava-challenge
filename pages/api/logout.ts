@@ -6,7 +6,7 @@ import {
 } from "../../lib/mongoUtils";
 import { deAuthorizeStravaToken } from "../../lib/stravaUtils";
 import mongoose from "mongoose";
-import url from "url";
+import url from "lib/dbUrl";
 import { StravaToken } from "../../models/schema";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
