@@ -10,7 +10,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Home = () => {
   const { state } = useGlobalState();
-  const { data, error } = useSWR("/api/results/totalScoreGrades", fetcher);
+  const { data, error } = useSWR("/api/results/top30grade/1", fetcher);
 
   if (!data) return <StateSWR />;
   if (error) return <StateSWR error={true} />;

@@ -36,7 +36,7 @@ const grade30grade = async (req: NextApiRequest, res: NextApiResponse) => {
   users.forEach((user) => {
     const userData = processUserData(user);
     usersData.push(userData);
-  })
+  });
 
   const top30usersData = getTop30(usersData);
 
