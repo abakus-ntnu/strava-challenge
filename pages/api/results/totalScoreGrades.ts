@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import url from "lib/dbUrl";
 import { User } from "models/schema";
 import processGradeData from "lib/endpointfunctions/processGradeData";
+import { UserEntity, ProcessedGradeData } from "lib/Types";
 
 /*
 Returns data for each grade as a total
@@ -16,18 +17,18 @@ data = [
 ]
 where grade?Data is on the format:
 grade?Data = {
-  grade: Number,
+  grade: number,
   distance: {
-    biking: Number,
-    running: Number,
-    walking: Number,
-    total: Number,
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
   },
   points: {
-    biking: Number,
-    running: Number,
-    walking: Number,
-    total: Number,
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
   }
 }
 */
@@ -40,13 +41,13 @@ const totalScoreGrades = async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
 
-  let allGradesData: Array<any> = [];
+  let allGradesData: ProcessedGradeData[] = [];
 
-  for (let grade = 1; grade <= 5; grade++) {
-    const users: Array<any> = await User.find({ grade: grade }).populate(
+  for (let grade: number = 1; grade <= 5; grade++) {
+    const users: UserEntity[] = await User.find({ grade: grade }).populate(
       "activities"
     );
-    const gradeData = processGradeData(users, grade);
+    const gradeData: ProcessedGradeData = processGradeData(users, grade);
     allGradesData.push(gradeData);
   }
 

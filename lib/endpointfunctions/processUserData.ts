@@ -1,16 +1,18 @@
 import points from "lib/points";
+import { ActivityEntity, UserEntity, ProcessedUserData } from "lib/Types";
+
 
 // Takes a user (where activities are populated), and returns userData
 // TODO: add types
-const processUserData = (user: any) => {
-  const activities: Array<any> = user.activities;
+const processUserData = (user: UserEntity) => {
+  const activities: ActivityEntity[] = user.activities;
 
-  let totalBikingDistance = 0;
-  let totalRunningDistance = 0;
-  let totalWalkingDistance = 0;
+  let totalBikingDistance: number = 0;
+  let totalRunningDistance: number = 0;
+  let totalWalkingDistance: number = 0;
 
-  activities.forEach((activity) => {
-    const distance = activity.distance;
+  activities.forEach((activity: ActivityEntity) => {
+    const distance: number = activity.distance;
     switch (activity.type) {
       case "Ride":
         totalBikingDistance += distance;
@@ -24,7 +26,7 @@ const processUserData = (user: any) => {
     }
   });
 
-  const userData = {
+  const userData: ProcessedUserData = {
     username: user.username,
     firstname: user.firstname,
     lastname: user.lastname,

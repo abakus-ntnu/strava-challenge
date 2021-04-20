@@ -4,6 +4,7 @@ import { User } from "models/schema";
 import url from "lib/dbUrl";
 import processUserData from "lib/endpointfunctions/processUserData";
 import getTop30 from "lib/endpointfunctions/getTop30";
+import { UserEntity, ProcessedUserData } from "lib/Types";
 
 /* 
 Returns data for the top 30 users (out of all users)
@@ -26,15 +27,15 @@ const top30all = async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
 
-  const users = await User.find().populate("activities");
-  let usersData: Array<any> = [];
+  const users: UserEntity[] = await User.find().populate("activities");
+  let usersData: ProcessedUserData[] = [];
 
-  users.forEach((user: any) => {
-    const userData = processUserData(user);
+  users.forEach((user: UserEntity) => {
+    const userData: ProcessedUserData = processUserData(user);
     usersData.push(userData);
   });
 
-  const top30usersData = getTop30(usersData);
+  const top30usersData: ProcessedUserData[] = getTop30(usersData);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");

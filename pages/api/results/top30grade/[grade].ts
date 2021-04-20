@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import url from "lib/dbUrl";
 import processUserData from "lib/endpointfunctions/processUserData";
 import getTop30 from "lib/endpointfunctions/getTop30";
+import { UserEntity, ProcessedUserData } from "lib/Types";
 
 /*
 Returns data for the top 30 users in the given grade
@@ -26,19 +27,19 @@ const grade30grade = async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
 
-  const grade = req.query.grade;
+  const grade: number = Number(req.query.grade);
 
-  const users: Array<any> = await User.find({ grade: grade }).populate(
+  const users: UserEntity[] = await User.find({ grade: grade }).populate(
     "activities"
   );
-  let usersData: Array<any> = [];
+  let usersData: ProcessedUserData[]  = [];
 
-  users.forEach((user) => {
-    const userData = processUserData(user);
+  users.forEach((user: UserEntity) => {
+    const userData: ProcessedUserData = processUserData(user);
     usersData.push(userData);
   });
 
-  const top30usersData = getTop30(usersData);
+  const top30usersData: ProcessedUserData[] = getTop30(usersData);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
