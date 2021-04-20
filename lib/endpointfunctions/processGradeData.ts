@@ -1,21 +1,23 @@
 import points from "lib/points";
+import { ActivityEntity, UserEntity, ProcessedGradeData } from "lib/Types";
+
 
 // Takes an array of users in a grade (where activities are populated), and returns gradeData
 // TODO: add types
-const processGradeData = (users: any, grade: number) => {
-  const activities: Array<any> = [];
-  users.forEach((user: any) => {
-    user.activities.forEach((activity: any) => {
+const processGradeData = (users: UserEntity[], grade: number) => {
+  const activities: ActivityEntity[] = [];
+  users.forEach((user: UserEntity) => {
+    user.activities.forEach((activity: ActivityEntity) => {
       activities.push(activity);
     });
   });
 
-  let totalBikingDistance = 0;
-  let totalRunningDistance = 0;
-  let totalWalkingDistance = 0;
+  let totalBikingDistance: number = 0;
+  let totalRunningDistance: number = 0;
+  let totalWalkingDistance: number = 0;
 
   activities.forEach((activity) => {
-    const distance = activity.distance;
+    const distance: number = activity.distance;
     switch (activity.type) {
       case "Ride":
         totalBikingDistance += distance;
@@ -29,7 +31,7 @@ const processGradeData = (users: any, grade: number) => {
     }
   });
 
-  const gradeData = {
+  const gradeData: ProcessedGradeData = {
     grade: grade,
     distance: {
       biking: totalBikingDistance,

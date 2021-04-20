@@ -3,28 +3,29 @@ import mongoose from "mongoose";
 import { User } from "models/schema";
 import url from "lib/dbUrl";
 import processUserData from "lib/endpointfunctions/processUserData";
+import { UserEntity, ProcessedUserData } from "lib/Types";
 
 /*
 Returns data for the given user
 
 The data will be on the format:
 data = {
-  username: String,
-  firstname: String,
-  lastname: String,
-  grade: Number,
-  study: String,
+  username: string,
+  firstname: string,
+  lastname: string,
+  grade: number,
+  study: string,
   distance: {
-    biking: Number,
-    running: Number,
-    walking: Number,
-    total: Number,
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
   },
   points: {
-    biking: Number,
-    running: Number,
-    walking: Number,
-    total: Number,
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
   }
 */
 
@@ -36,10 +37,10 @@ const user = async (req: NextApiRequest, res: NextApiResponse) => {
     useCreateIndex: true,
   });
 
-  const { id } = req.query;
+  const id: number = Number(req.query.id);
 
-  const user = await User.findOne({ id: id }).populate("activities");
-  const userData = processUserData(user);
+  const user: UserEntity = await User.findOne({ id: id }).populate("activities");
+  const userData: ProcessedUserData = processUserData(user);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");

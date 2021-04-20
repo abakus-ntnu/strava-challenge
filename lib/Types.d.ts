@@ -31,7 +31,43 @@ export type UserEntity = {
   username: string;
   firstname: string;
   lastname: string;
-  grade: string;
+  grade: number;
   study: string;
   activities: ActivityEntity[];
 };
+
+export type ProcessedUserData = {
+  username: string,
+  firstname: string,
+  lastname: string,
+  grade: number,
+  study: string,
+  distance: {
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
+  },
+  points: {
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
+  }
+}
+
+export type ProcessedGradeData = {
+  grade: number,
+  distance: {
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
+  },
+  points: {
+    biking: number,
+    running: number,
+    walking: number,
+    total: number,
+  }
+}
