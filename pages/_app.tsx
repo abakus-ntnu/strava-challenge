@@ -41,6 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Link href="https://github.com/webkom">
                 <Button>Webkom</Button>
               </Link>
+              <Link href="https://www.instagram.com/katrinebjunee/">
+                <Button>Koskom</Button>
+              </Link>
             </div>
             <Link href="https://github.com/abakus-ntnu/strava-challenge">
               <Button>
