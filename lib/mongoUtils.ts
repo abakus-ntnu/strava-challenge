@@ -19,6 +19,8 @@ export const createActivity = async (activityId: number, userId: number) => {
   // Might be an issue if two activities are created at the exact same time
   const activityData = clubActivities[0];
 
+  if (!isValidActivity(activityData)) return;
+
   const user = await findOrCreateUser({ id: userId });
   const activity = await Activity.create({
     ...activityData,
@@ -29,6 +31,26 @@ export const createActivity = async (activityId: number, userId: number) => {
   await activity.save();
   await user.activities.push(activity);
   await user.save();
+};
+
+const isValidActivity = (activityData: any) => {
+  const { type, distance, moving_time } = activityData;
+  let upperSpeedBound; // measured in m/s
+  switch (type){
+    case "Ride": 
+      upperSpeedBound = 80;
+      break;
+    case "Run": 
+      upperSpeedBound = 10;
+      break;
+    case "Walk": 
+      upperSpeedBound = 5;
+      break;
+    default: 
+      upperSpeedBound = 0;
+  };
+  if (distance/moving_time > upperSpeedBound) return false;
+  return true;
 };
 
 export const updateActivity = async (
